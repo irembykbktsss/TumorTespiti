@@ -4,6 +4,8 @@ from PIL import Image
 from matplotlib import pyplot as plt
 from numpy import save
 from numpy import load
+from sklearn.model_selection import KFold
+from sklearn.metrics import accuracy_score
 
 class YSAEgitim2():              #HASTA2 İÇİN EĞİTİM 
 
@@ -66,9 +68,6 @@ class YSAEgitim2():              #HASTA2 İÇİN EĞİTİM
     def createYSA(self):                                                             #boş model oluşturur
 
         self.YSA = cv2.ml.ANN_MLP_create()
-    
-    def train(self):        
-                                     
         self.layer_sizes = np.int64([324, 50 , 2])                                 #özellik sayısı(girdi) , gizli katman noran sayısı, çıktı
         self.YSA.setLayerSizes(self.layer_sizes)                                     #Giriş ve çıkış katmanları dahil olmak üzere her katmanda nöron sayısını belirten tamsayı vektörü
         
@@ -82,7 +81,39 @@ class YSAEgitim2():              #HASTA2 İÇİN EĞİTİM
         self.YSA.setTrainMethod(cv2.ml.ANN_MLP_BACKPROP, 0.0001)                     #Eğitim yöntemini ve ortak parametreleri ayarlar
         self.YSA.train(self.egitimData , cv2.ml.ROW_SAMPLE , self.etiketVektor)      #istatiksel modeli eğitir , ROW_SAMPLE örneklerin satırda yer aldığı anlamında , bir satırdaki 1x324 float değer 1 örnektir anlamında.
         self.test = self.YSA.save('YSA2')
-   
+    
+                                    
+    def train_and_evaluate(self):
+        # Modeli ve verileri ayarlayın
+        self.createYSA()  # Model oluşturma
+        
+        # 10 kat çapraz doğrulama
+        kf = KFold(n_splits=10, shuffle=True, random_state=42)
+        accuracies = []
+        
+        # Verilerin veri tipini np.float32 olarak dönüştürün
+        self.egitimData = np.array(self.egitimData, dtype=np.float32)
+        self.etiketVektor = np.array(self.etiketVektor, dtype=np.float32)
+        
+        for train_index, test_index in kf.split(self.egitimData):
+            # Eğitim ve test verilerini ayırma
+            X_train, X_test = self.egitimData[train_index], self.egitimData[test_index]
+            y_train, y_test = self.etiketVektor[train_index], self.etiketVektor[test_index]
+            
+            # Modeli eğitme
+            self.YSA.train(X_train, cv2.ml.ROW_SAMPLE, y_train)
+            
+            # Modeli test etme
+            _, y_pred = self.YSA.predict(X_test)
+            
+            # Test sonuçlarını değerlendirme
+            acc = accuracy_score(y_test.argmax(axis=1), y_pred.argmax(axis=1))
+            accuracies.append(acc)
+        
+        # Ortalama doğruluk hesaplama
+        mean_accuracy = np.mean(accuracies)
+        print(f"10-fold cross-validation mean accuracy: {mean_accuracy * 100:.2f}%")
+
 
 if __name__ == "__main__":
     Hasta = YSAEgitim2()
@@ -93,5 +124,5 @@ if __name__ == "__main__":
     Hasta.arkaplanEtiketVektor()
     Hasta.etiketVektor()
     Hasta.createYSA()
-    Hasta.train()
+    Hasta.train_and_evaluate()
 

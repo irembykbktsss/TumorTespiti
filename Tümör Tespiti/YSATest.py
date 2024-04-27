@@ -11,8 +11,8 @@ class YSATest():
 
         self.patch_boyut = 32 
 
-        self.loadedFeatureTumor5 = np.load('Tümör Tespiti/hasta3_featureTumor_{}.npy'.format(self.patch_boyut))
-        self.loadedFeatureArka5 = np.load('Tümör Tespiti/hasta3_featureArkaplan_{}.npy'.format(self.patch_boyut))
+        self.loadedFeatureTumor5 = np.load('Tümör Tespiti/hasta4_featureTumor_{}.npy'.format(self.patch_boyut))
+        self.loadedFeatureArka5 = np.load('Tümör Tespiti/hasta4_featureArkaplan_{}.npy'.format(self.patch_boyut))
 
     
     def testData(self):
@@ -40,7 +40,7 @@ class YSATest():
     
     def test(self):                                                             
 
-        self.YSA = cv2.ml.ANN_MLP_load('YSA5')      
+        self.YSA = cv2.ml.ANN_MLP_load('YSA4')      
                 
         print(self.YSA.getTrainMethod())                #0
         print(self.YSA.getLayerSizes())                 #[[324][100][2]]
