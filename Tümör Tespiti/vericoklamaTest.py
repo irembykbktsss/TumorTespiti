@@ -61,7 +61,7 @@ class YSATest():
                 self.karmasaMatrisi[0, 1] += 1  # False Positive
             if self.truth == 1 and self.pred == 0:
                 self.karmasaMatrisi[1, 0] += 1  # False Negative
-            
+        print("---")
         print(self.karmasaMatrisi)
 
         # Calculate metrics

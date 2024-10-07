@@ -107,7 +107,7 @@ class reader():
 
 ############dicom ve .mha çakıştırma(normalizasyon sonrası)###################################################################
 
-    patch_boyut = 32 
+    patch_boyut = 64 
 
     if hasta == 0:
         tumorVokselSayısı = 27541

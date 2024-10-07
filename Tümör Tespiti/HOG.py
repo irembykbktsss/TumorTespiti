@@ -10,7 +10,7 @@ class HOG():
     
     def __init__(self):
 
-        self.patch_boyut = 64
+        self.patch_boyut = 32
 
         self.hasta = int(input("Toplamda 5 hastamız vardır.İstediğiniz hasta sayısını giriniz(0-4):"))
 
@@ -132,7 +132,8 @@ if __name__ == '__main__':
     
     Hasta1.tumorHog()
     Hasta1.arkaplanHog()
-    #Hasta1.file()    Her hasta için 1 kere çalıştır
+    Hasta1.file()   
+    #  Her hasta için 1 kere çalıştır
 
 
     

@@ -10,8 +10,8 @@ class YSATest():
 
     def __init__(self):
         self.patch_boyut = 32 
-        self.loadedFeatureTumor5 = np.load('Tümör Tespiti/hasta4_featureTumor_{}.npy'.format(self.patch_boyut))
-        self.loadedFeatureArka5 = np.load('Tümör Tespiti/hasta4_featureArkaplan_{}.npy'.format(self.patch_boyut))
+        self.loadedFeatureTumor5 = np.load('Tümör Tespiti/hasta2_featureTumor_{}.npy'.format(self.patch_boyut))
+        self.loadedFeatureArka5 = np.load('Tümör Tespiti/hasta2_featureArkaplan_{}.npy'.format(self.patch_boyut))
 
     def testData(self):
         self.testData = np.concatenate((self.loadedFeatureArka5, self.loadedFeatureTumor5), axis=0)    
@@ -30,7 +30,7 @@ class YSATest():
         print(self.testEtiket.shape)  # (2044,2)
 
     def test(self):                                                             
-        self.YSA = cv2.ml.ANN_MLP_load('YSA4')      
+        self.YSA = cv2.ml.ANN_MLP_load('YSA2xml')      
         print(self.YSA.getTrainMethod())  # 0
         print(self.YSA.getLayerSizes())  # [[324][100][2]]
         print(self.YSA.getTermCriteria())  # (3, 300, 0.001)
